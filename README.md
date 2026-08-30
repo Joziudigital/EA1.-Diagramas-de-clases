@@ -30,7 +30,7 @@ Diseñar e implementar un sistema de gestión de bibliotecas que incorpore la te
 • Asegurar que las subclases puedan reemplazar su clase base sin cambiar el comportamiento esperado del sistema. 
 • Definir relaciones (asociación, agregación, composición) que estén bien definidas para el nivel de dependencia entre las clases en el sistema.
 
-
+## Diagrama de clase
 
 ```mermaid
 classDiagram
