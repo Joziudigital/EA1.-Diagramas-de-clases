@@ -7,12 +7,13 @@
 
 - [Objetivo general](#objetivo-general)
 - [Objetivos específicos](#objetivos-específicos)
-- [Diagrama de clases](#-diagrama-de-clases)
-- [Descripción de las clases](#-descripción-de-las-clases-identificadas)
-- [Justificación de las relaciones](#-justificación-de-las-relaciones-utilizadas)
-- [Cohesión, bajo acoplamiento y SOLID](#-aplicación-de-cohesión-bajo-acoplamiento-y-solid)
-- [Código Fuente UML](#código-fuente-uml)
-- [Archivos del proyecto](#-archivos-del-proyecto)
+- [Diagrama de clases](#diagrama-de-clase)
+- [Descripción de las clases](#descripcion-de-las-clases)
+- [Justificación de las relaciones](#justificación-de-las-relaciones)
+- [Cohesión, bajo acoplamiento y SOLID](#cohesión-bajo-acoplamiento-y-solid)
+- [Código fuente UML](#código-fuente-uml)
+- [Archivos del proyecto](#archivos-del-proyecto)
+
 
 ---
 
@@ -27,8 +28,101 @@ Diseñar y modelar un sistema de gestión de bibliotecas que incorpore la teorí
 * Asegurar que las subclases puedan reemplazar su clase base sin cambiar el comportamiento esperado del sistema.
 * Definir relaciones (asociación, agregación, composición) adecuadas para el nivel de dependencia entre las clases en el sistema. 
 
-## Diagrama de clases
-[Ver diagrama en Google Drive](https://drive.google.com/file/d/1kPZg6wfTD67tstUoDb0GPA7_y9NdE4rp/view?usp=sharing)
+## Diagrama de clase
+ 
+```mermaid
+classDiagram
+    direction TB
+
+    class Biblioteca {
+        - nombre: String
+        + ingresarLibro(numeroSerie: String, cantidad: int, disponibilidad: boolean): void
+        + buscarLibroPorSerie(numeroSerie: String): Libro
+        + actualizarDisponibilidad(numeroSerie: String, cantidad: int): void
+        + registrarPrestamo(prestamo: Prestamo): void
+    }
+
+    class Libro {
+        <<abstract>>
+        - numeroSerie: String
+        - titulo: String
+        - cantidad: int
+        - fechaPublicacion: Date
+        + estaDisponible(): boolean
+    }
+
+    class LibroFisico {
+        - ubicacionEstante: String
+        - estadoFisico: String
+        - numeroCopiasEnPrestamo: int
+    }
+
+    class LibroDigital {
+        - formato: String
+        - enlaceDescarga: String
+        - tamanoArchivoMB: double
+        - licenciasSimultaneas: int
+    }
+
+    class Autor {
+        - nombre: String
+        - fechaNacimiento: Date
+        - nacionalidad: String
+    }
+
+    class Usuario {
+        - id: String
+        - nombre: String
+        - telefono: String
+        - email: String
+        - habilitadoParaPrestamo: boolean
+        + puedeSolicitarPrestamo(): boolean
+    }
+
+    class Prestamo {
+        - idPrestamo: String
+        - fechaPrestamo: Date
+        - fechaDevolucionEsperada: Date
+        - fechaDevolucionReal: Date
+        - multa: double
+        - estado: String
+        + calcularMulta(): double
+        + estaVencido(): boolean
+        + registrarDevolucion(fecha: Date): void
+    }
+
+    %% Herencia
+    Libro <|-- LibroFisico
+    Libro <|-- LibroDigital
+
+    %% Composicion
+    Biblioteca "1" *-- "0..*" Libro : administra
+    Biblioteca "1" *-- "0..*" Prestamo : gestiona
+
+    %% Agregacion
+    Libro "0..*" o-- "1" Autor : escrito por
+    Prestamo "1" o-- "1..*" Libro : incluye
+
+    %% Asociacion simple
+    Usuario "1" -- "0..*" Prestamo : solicita
+```
+
+## Descripcion de las clases
+
+**Clase Biblioteca:** Esta clase tiene un nombre y dirección. En ella se irá agregando los datos de cada libro físico y digital
+
+**Clase Libro:** Es cada elemento que puede ser prestado de la biblioteca y que contiene el molde para crear las clases heredadas de LibroDigital y *LibroFisico. Es una clase abstracta, ya que en esta lógica sólo existen las clases heredadas y no un libro genérico
+
+**Clase LibroDigital y LibroFisico:** Son clases heredadas de clase Libro. En lo que se difieren es en sus atributos. Por ejemplo, LibroFisico agrega datos de ubicación de estante, estado físico y cantidad de ejemplares. Mientras que LibroDigital, tiene atributos de formato, tamaño en MB, enlace de descarga y licencias simultáneas
+
+**Clase Autor:** Representa a la persona que escribió uno o varios libros del catálogo
+
+**Clase Prestamo:** Representa la transacción de préstamo como qué usuario solicitó, qué libros, cuándo, cuándo debía devolver y cuándo devolvió realmente, además del cálculo de multa por atraso.
+
+**Clase Usuario:** Representa a la persona que solicita préstamos. Se guardan sus datos de contacto y se verifica si está habilitado para prestar.
+
+
+## Justificación de las relaciones
 
 ## Descripción de las clases
 * **Clase Biblioteca:** Esta clase tiene un nombre y dirección. En ella se irán agregando los datos de cada libro físico y digital.
@@ -56,6 +150,7 @@ Diseñar y modelar un sistema de gestión de bibliotecas que incorpore la teorí
 ## Archivos del proyecto
 * **Repositorio:** [Enlace a GitHub](https://github.com/Joziudigital/EA1.-Diagramas-de-clases)
 * **Video de presentación:** [Añadir enlace aquí]
+* **Documento Word de Drive:** [EA1. Diagrama de clases](https://docs.google.com/document/d/1nJuMVUsa0TuEdszrQ5rFQaHDX7KTRXxJ/edit?usp=sharing&ouid=110524674555231772836&rtpof=true&sd=true)
 
 ## Código fuente UML
 
