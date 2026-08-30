@@ -9,15 +9,6 @@
 - [Archivos del proyecto](#-archivos-del-proyecto)
 
 
-
-
-
-
-
-
-
-- 
-
 ```mermaid
 classDiagram
     direction TB
