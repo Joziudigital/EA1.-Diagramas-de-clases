@@ -1,3 +1,12 @@
+## Presentación de la Actividad
+
+Un diagrama de clases UML es una representación gráfica que permite a los usuarios visualizar la estructura estática de un sistema de software mediante las clases que lo componen, sus atributos, métodos, relaciones entre ellas (asociación, herencia, agregación, composición, etc.). 
+Su valor en el diseño de software orientado a objetos es que es una de las herramientas más básicas para la planificación y comunicación; apoya el proceso de desarrollo del diseño antes del código en los equipos de desarrollo de código, el conocimiento del sistema por parte de los miembros del equipo y la documentación técnica del proyecto durante las etapas de desarrollo. En este documento, se nos presenta este tipo de diagrama para representar las principales áreas del dominio (libros, autores, préstamos, etc.) y las relaciones entre ellas, como la autoría de una obra, el préstamo de un ejemplar a un usuario, etc. 
+El desarrollo de este modelo se realizó con colaboración (utilizamos la plataforma de diagramación para construir un modelo juntos y visualizarlo PLANT) y un repositorio de GitHub para el control de versiones, la gestión del equipo, la organización de las contribuciones del equipo y la organización del progreso del proyecto.
+
+
+
+
 ##  Tabla de contenido
 
 - [Objetivo general](#-objetivo-general)
@@ -145,3 +154,4 @@ Usuario "1" -- "0..*" Prestamo : solicita >
 
 @enduml
 
+```
