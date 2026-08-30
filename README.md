@@ -6,7 +6,6 @@ El desarrollo de este modelo se realizó con colaboración (utilizamos la plataf
 
 
 
-
 ##  Tabla de contenido
 
 - [Objetivo general](#objetivo-principal)
