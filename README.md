@@ -11,11 +11,11 @@ El desarrollo de este modelo se realizó con colaboración (utilizamos la plataf
 
 - [Objetivo general](#objetivo-principal)
 - [Objetivos específicos](#objetivos-específicos)
-- [Diagrama de clases](#-diagrama-de-clases)
-- [Descripción de las clases](#-descripción-de-las-clases-identificadas)
-- [Justificación de las relaciones](#-justificación-de-las-relaciones-utilizadas)
-- [Cohesión, bajo acoplamiento y SOLID](#-aplicación-de-cohesión-bajo-acoplamiento-y-solid)
-- [Archivos del proyecto](#-archivos-del-proyecto)
+- [Diagrama de clases](#diagrama-de-clase)
+- [Descripción de las clases](#descripcion-de-las-clases)
+- [Justificación de las relaciones](#justificación-de-las-relaciones)
+- [Cohesión, bajo acoplamiento y SOLID](#cohesión-bajo-acoplamiento-y-solid)
+- [Archivos del proyecto](#archivos-del-proyecto)
 
 ## Objetivo Principal
 
@@ -124,7 +124,7 @@ classDiagram
 **Clase Usuario:** Representa a la persona que solicita préstamos. Se guardan sus datos de contacto y se verifica si está habilitado para prestar.
 
 
-##Justificación de las relaciones
+## Justificación de las relaciones
 
 * **Herencia:** Entre la clase abstracta Libro y sus hijas (LibroFisico, LibroDigital). Sirve para no repetir código, ya que comparten datos básicos (como el número de serie) pero cada una tiene detalles propios (ubicación en estante vs enlace de descarga).
 * **Composición:** Entre Biblioteca y las clases Libro y Prestamo. Es una relación fuerte: si la biblioteca deja de existir en el sistema, sus registros internos de libros y préstamos también desaparecen.
