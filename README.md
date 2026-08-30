@@ -15,7 +15,9 @@ El desarrollo de este modelo se realizó con colaboración (utilizamos la plataf
 - [Descripción de las clases](#descripcion-de-las-clases)
 - [Justificación de las relaciones](#justificación-de-las-relaciones)
 - [Cohesión, bajo acoplamiento y SOLID](#cohesión-bajo-acoplamiento-y-solid)
+- [Código fuente UML](#código-fuente-uml)
 - [Archivos del proyecto](#archivos-del-proyecto)
+
 
 ## Objetivo Principal
 
@@ -143,6 +145,7 @@ classDiagram
 ## Archivos del proyecto 
 * **Repositorio:** [Enlace a GitHub](https://github.com/Joziudigital/EA1.-Diagramas-de-clases)
 * **Video de presentación:** [Añadir enlace aquí]
+* **Documento Word de Drive:** [EA1. Diagrama de clases](https://docs.google.com/document/d/1nJuMVUsa0TuEdszrQ5rFQaHDX7KTRXxJ/edit?usp=sharing&ouid=110524674555231772836&rtpof=true&sd=true)
 
 ## Código fuente UML
 
