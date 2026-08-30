@@ -9,8 +9,8 @@ El desarrollo de este modelo se realizó con colaboración (utilizamos la plataf
 
 ##  Tabla de contenido
 
-- [Objetivo general](#-objetivo-general)
-- [Objetivos específicos](#-objetivos-específicos)
+- [Objetivo general](#objetivo-principal)
+- [Objetivos específicos](#objetivos-específicos)
 - [Diagrama de clases](#-diagrama-de-clases)
 - [Descripción de las clases](#-descripción-de-las-clases-identificadas)
 - [Justificación de las relaciones](#-justificación-de-las-relaciones-utilizadas)
@@ -23,12 +23,12 @@ Diseñar e implementar un sistema de gestión de bibliotecas que incorpore la te
 
 ## Objetivos Específicos
 
-• Especificar las entidades del dominio (Libro, Autor, Préstamo, Usuario) definiendo sus características y comportamientos clave. 
-• Proporcionar jerarquías de clases para la reutilización de código y la extensión de comportamientos. 
-• Permitir que las subclases cambien los comportamientos heredados según su naturaleza inherente. 
-• Diseñar cada clase para que tenga una única responsabilidad por sí misma. 
-• Asegurar que las subclases puedan reemplazar su clase base sin cambiar el comportamiento esperado del sistema. 
-• Definir relaciones (asociación, agregación, composición) que estén bien definidas para el nivel de dependencia entre las clases en el sistema.
+* Especificar las entidades del dominio (Libro, Autor, Préstamo, Usuario) definiendo sus características y comportamientos clave.
+* Proporcionar jerarquías de clases para la reutilización de código y la extensión de comportamientos.
+* Permitir que las subclases cambien los comportamientos heredados según su naturaleza inherente.
+* Diseñar cada clase para que tenga una única responsabilidad por sí misma.
+* Asegurar que las subclases puedan reemplazar su clase base sin cambiar el comportamiento esperado del sistema.
+* Definir relaciones (asociación, agregación, composición) adecuadas para el nivel de dependencia entre las clases en el sistema. 
 
 ## Diagrama de clase
  
@@ -108,3 +108,17 @@ classDiagram
     %% Asociacion simple
     Usuario "1" -- "0..*" Prestamo : solicita
 ```
+
+## Descripcion de las clases
+
+**Clase Biblioteca:** Esta clase tiene un nombre y dirección. En ella se irá agregando los datos de cada libro físico y digital
+
+**Clase Libro:** Es cada elemento que puede ser prestado de la biblioteca y que contiene el molde para crear las clases heredadas de LibroDigital y *LibroFisico. Es una clase abstracta, ya que en esta lógica sólo existen las clases heredadas y no un libro genérico
+
+**Clase LibroDigital y LibroFisico:** Son clases heredadas de clase Libro. En lo que se difieren es en sus atributos. Por ejemplo, LibroFisico agrega datos de ubicación de estante, estado físico y cantidad de ejemplares. Mientras que LibroDigital, tiene atributos de formato, tamaño en MB, enlace de descarga y licencias simultáneas
+
+**Clase Autor:** Representa a la persona que escribió uno o varios libros del catálogo
+
+**Clase Prestamo:** Representa la transacción de préstamo como qué usuario solicitó, qué libros, cuándo, cuándo debía devolver y cuándo devolvió realmente, además del cálculo de multa por atraso.
+
+**Clase Usuario:** Representa a la persona que solicita préstamos. Se guardan sus datos de contacto y se verifica si está habilitado para prestar.
