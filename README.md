@@ -38,19 +38,19 @@ classDiagram
     direction TB
 
     class Biblioteca {
-        - nombre: String
+        + nombre: String
         + ingresarLibro(numeroSerie: String, cantidad: int, disponibilidad: boolean): void
         + buscarLibroPorSerie(numeroSerie: String): Libro
-        + actualizarDisponibilidad(numeroSerie: String, cantidad: int): void
-        + registrarPrestamo(prestamo: Prestamo): void
+        # actualizarDisponibilidad(numeroSerie: String, cantidad: int): void
+        # registrarPrestamo(prestamo: Prestamo): void
     }
 
     class Libro {
         <<abstract>>
-        - numeroSerie: String
-        - titulo: String
-        - cantidad: int
-        - fechaPublicacion: Date
+        + numeroSerie: String
+        + titulo: String
+        + cantidad: int
+        + fechaPublicacion: Date
         + estaDisponible(): boolean
     }
 
@@ -74,16 +74,15 @@ classDiagram
     }
 
     class Usuario {
-        - id: String
-        - nombre: String
-        - telefono: String
-        - email: String
+        + id: String
+        + nombre: String
+        + telefono: String
+        + email: String
         - habilitadoParaPrestamo: boolean
-        + puedeSolicitarPrestamo(): boolean
     }
 
     class Prestamo {
-        - idPrestamo: String
+        + idPrestamo: String
         - fechaPrestamo: Date
         - fechaDevolucionEsperada: Date
         - fechaDevolucionReal: Date
