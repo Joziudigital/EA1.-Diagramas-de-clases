@@ -142,7 +142,7 @@ classDiagram
 
 ## Archivos del proyecto 
 * **Repositorio:** [Enlace a GitHub](https://github.com/Joziudigital/EA1.-Diagramas-de-clases)
-* **Video de presentación:** [Añadir enlace aquí]
+* **Video de presentación:** [Presentación](https://drive.google.com/file/d/1rTl0xHcUzpm24wWsss2XYK1hjV7sqEhs/view?usp=sharing)
 * **Documento Word de Drive:** [EA1. Diagrama de clases](https://docs.google.com/document/d/1nJuMVUsa0TuEdszrQ5rFQaHDX7KTRXxJ/edit?usp=sharing&ouid=110524674555231772836&rtpof=true&sd=true)
 
 ## Código fuente UML
