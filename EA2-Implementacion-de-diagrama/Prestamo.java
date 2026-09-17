@@ -39,4 +39,53 @@ public class Prestamo {
     public void agregarLibro(Libro libro) {
         this.librosPrestados.add(libro);
     }
+
+    // --- GETTERS Y SETTERS ---
+    public String getIdPrestamo() {
+        return idPrestamo;
+    }
+
+    public void setIdPrestamo(String idPrestamo) {
+        this.idPrestamo = idPrestamo;
+    }
+
+    public Date getFechaPrestamo() {
+        return fechaPrestamo;
+    }
+
+    public void setFechaPrestamo(Date fechaPrestamo) {
+        this.fechaPrestamo = fechaPrestamo;
+    }
+
+    public Date getFechaDevolucionEsperada() {
+        return fechaDevolucionEsperada;
+    }
+
+    public void setFechaDevolucionEsperada(Date fechaDevolucionEsperada) {
+        this.fechaDevolucionEsperada = fechaDevolucionEsperada;
+    }
+
+    public Date getFechaDevolucionReal() {
+        return fechaDevolucionReal;
+    }
+
+    public void setFechaDevolucionReal(Date fechaDevolucionReal) {
+        this.fechaDevolucionReal = fechaDevolucionReal;
+    }
+
+    public double getMulta() {
+        return multa;
+    }
+
+    public void setMulta(double multa) {
+        this.multa = multa;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 }

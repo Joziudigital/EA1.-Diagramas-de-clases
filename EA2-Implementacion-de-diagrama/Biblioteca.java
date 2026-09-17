@@ -14,6 +14,16 @@ public class Biblioteca {
         this.prestamos = new ArrayList<>();
     }
 
+    // --- ESTOS SON LOS GETTERS Y SETTERS QUE FALTABAN ---
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    // ----------------------------------------------------
+
     // 1. Método original que está en tu diagrama
     public void ingresarLibro(String numeroSerie, int cantidad, boolean disponibilidad) {
         // Lógica para buscar el libro y actualizar su stock
