@@ -1,10 +1,12 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Collection;
+
 
 public class Biblioteca {
     private String nombre;
     
-    // Relaciones de composición
     private List<Libro> catalogo;
     private List<Prestamo> prestamos;
 
@@ -14,7 +16,7 @@ public class Biblioteca {
         this.prestamos = new ArrayList<>();
     }
 
-    // --- ESTOS SON LOS GETTERS Y SETTERS QUE FALTABAN ---
+    
     public String getNombre() {
         return nombre;
     }
@@ -22,11 +24,9 @@ public class Biblioteca {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    // ----------------------------------------------------
 
-    // 1. Método original que está en tu diagrama
     public void ingresarLibro(String numeroSerie, int cantidad, boolean disponibilidad) {
-        // Lógica para buscar el libro y actualizar su stock
+  
     }
 
     // 2. SOBRECARGA DEL MÉTODO
