@@ -257,7 +257,7 @@ public class Main {
             }
         }
 
-        System.out.println("✔ Devolución registrada para el préstamo " + prestamo.getIdPrestamo() + ".");
+        System.out.println("Devolución registrada para el préstamo " + prestamo.getIdPrestamo() + ".");
         System.out.println("  (Multa calculada: $" + prestamo.calcularMulta() + " - lógica pendiente de definir en Prestamo)");
     }
 
@@ -319,7 +319,21 @@ public class Main {
         Usuario usuario = new Usuario("U-EJ-001", "Ana Torres", "ana.torres@iudigital.com");
         usuarios.add(usuario);
 
-        System.out.println(" Se cargaron: 1 autor, 1 libro físico, 1 libro digital y 1 usuario de ejemplo.");
+        Autor autor = new Autor("Aurelio Baldor", new Date(), "Cubano");
+        autores.add(autor);
+
+        LibroFisico fisico = new LibroFisico("F-EJ-002", "El álgebrade Baldor", 3, new Date(), autor, "Estante A2");
+        biblioteca.ingresarLibro(fisico);
+        libros.add(fisico);
+
+        LibroDigital digital = new LibroDigital("D-EJ-002", "El álgebra de Baldor", 4, new Date(), autor, "EPUB", 3.2, 2);
+        biblioteca.ingresarLibro(digital);
+        libros.add(digital);
+
+        Usuario usuario = new Usuario("U-EJ-002", "Susanito Juarez", "susanito@iudigital.com");
+        usuarios.add(usuario);
+
+        System.out.println(" Se cargaron: 2 autor, 2 libro físico, 2 libro digital y 2 usuario de ejemplo.");
         System.out.println(" Ya puedes probar las opciones 6 (préstamo), 7 (devolución) y 8 (catálogo).");
     }
 
