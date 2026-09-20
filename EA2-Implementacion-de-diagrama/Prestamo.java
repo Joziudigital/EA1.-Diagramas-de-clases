@@ -88,3 +88,4 @@ public class Prestamo {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+}
