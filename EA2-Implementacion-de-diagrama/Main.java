@@ -41,15 +41,25 @@ public class Main {
 
             switch (opcion) {
                 case 1: registrarAutor();
+                    break;
                 case 2: registrarLibroFisico();
+                    break;
                 case 3: registrarLibroDigital();
+                    break;
                 case 4: ingresarExistencias();
+                    break;
                 case 5: registrarUsuario();
+                    break;
                 case 6: realizarPrestamo();
+                    break; 
                 case 7: registrarDevolucion();
+                    break;
                 case 8: verCatalogo();
+                    break;
                 case 9: verUsuariosYPrestamos();
+                    break;
                 case 10: cargarDatosEjemplo();
+                    break; 
                 case 0: salir = true;
                 default: System.out.println("Opción no válida, intenta de nuevo.");
             }
@@ -112,7 +122,7 @@ public class Main {
 
         String serie = leerTexto("Número de serie: ");
         String titulo = leerTexto("Título: ");
-        String formato = leerTexto("Formato (PDF/EPUB/MOBI): ");
+        String formato = leerTexto("Formato (PDF/EPUB): ");
         int licencias = leerEnteroPositivo("Licencias simultáneas disponibles: ");
 
         LibroDigital libro = new LibroDigital(serie, titulo, licencias, new Date(), autor, formato, 4.5, licencias);
@@ -181,7 +191,7 @@ public class Main {
 
         // Polimorfismo: no importa el tipo real, se pregunta por la interfaz común
         if (!libro.estaDisponible()) {
-            System.out.println("✘ \"" + libro.getTitulo() + "\" no tiene disponibilidad en este momento.");
+            System.out.println("\"" + libro.getTitulo() + "\" no tiene disponibilidad en este momento.");
             return;
         }
 
@@ -306,7 +316,7 @@ public class Main {
         biblioteca.ingresarLibro(digital);
         libros.add(digital);
 
-        Usuario usuario = new Usuario("U-EJ-001", "Ana Torres", "ana.torres@correo.com");
+        Usuario usuario = new Usuario("U-EJ-001", "Ana Torres", "ana.torres@iudigital.com");
         usuarios.add(usuario);
 
         System.out.println(" Se cargaron: 1 autor, 1 libro físico, 1 libro digital y 1 usuario de ejemplo.");
