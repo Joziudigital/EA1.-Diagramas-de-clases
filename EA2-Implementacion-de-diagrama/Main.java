@@ -1,5 +1,5 @@
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -7,131 +7,435 @@ import java.util.Scanner;
 
 public class Main {
 
+    private final Scanner sc = new Scanner(System.in);
+    private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+    private final Biblioteca biblioteca = new Biblioteca("Biblioteca Central");
+    private final List<Autor> autores = new ArrayList<>();
+    private final List<Libro> libros = new ArrayList<>();      // espejo del catálogo para poder listarlo
+    private final List<Usuario> usuarios = new ArrayList<>();
+
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        new Main().ejecutar();
+    }
 
-        System.out.println("=== SISTEMA DE GESTIÓN DE BIBLIOTECA ===\n");
+    //MENÚ PRINCIPAL
 
-        //1. Crear la Biblioteca
-        System.out.print("Nombre de la biblioteca: ");
-        String nombreBiblioteca = leerTexto(sc, "Biblioteca Central");
-        Biblioteca biblioteca = new Biblioteca(nombreBiblioteca);
+    private void ejecutar() {
+        boolean salir = false;
 
-        //2. Registrar Autor
-        System.out.println("\n-- Registro de Autor --");
-        System.out.print("Nombre del autor: ");
-        String nombreAutor = leerTexto(sc, "Autor Desconocido");
-        System.out.print("Nacionalidad: ");
-        String nacionalidad = leerTexto(sc, "N/D");
-        Autor autor = new Autor(nombreAutor, new Date(), nacionalidad);
 
-        //3. Registrar Libro Físico
-        System.out.println("\n-- Registro de Libro Físico --");
-        System.out.print("Número de serie: ");
-        String serieFisico = leerTexto(sc, "F-001");
-        System.out.print("Título: ");
-        String tituloFisico = leerTexto(sc, "Sin título");
-        System.out.print("Cantidad de copias: ");
-        int cantidadFisico = leerEntero(sc, 1);
-        System.out.print("Ubicación en el estante: ");
-        String ubicacion = leerTexto(sc, "Estante A1");
+        System.out.println("   SISTEMA DE GESTIÓN DE BIBLIOTECA            ");
+        System.out.println("   Bienvenido/a - " + biblioteca.getNombre());
 
-        LibroFisico libroFisico = new LibroFisico(
-                serieFisico, tituloFisico, cantidadFisico, new Date(), autor, ubicacion);
-        biblioteca.ingresarLibro(libroFisico); // usa la sobrecarga que recibe un Libro
 
-        //4. Registrar Libro Digital
-        System.out.println("\n-- Registro de Libro Digital --");
-        System.out.print("Número de serie: ");
-        String serieDigital = leerTexto(sc, "D-001");
-        System.out.print("Título: ");
-        String tituloDigital = leerTexto(sc, "Sin título");
-        System.out.print("Formato (PDF/EPUB): ");
-        String formato = leerTexto(sc, "PDF");
-        System.out.print("Licencias simultáneas disponibles: ");
-        int licencias = leerEntero(sc, 1);
+        while (!salir) {
+            mostrarMenu();
+            int opcion = leerEntero("Elige una opción: ");
 
-        LibroDigital libroDigital = new LibroDigital(
-                serieDigital, tituloDigital, licencias, new Date(), autor, formato, 4.5, licencias);
-        biblioteca.ingresarLibro(libroDigital);
+            switch (opcion) {
+                case 1: registrarAutor(); break;
+                case 2: registrarLibroFisico(); break;
+                case 3: registrarLibroDigital(); break;
+                case 4: ingresarExistencias(); break;
+                case 5: registrarUsuario(); break;
+                case 6: realizarPrestamo(); break;
+                case 7: registrarDevolucion(); break;
+                case 8: verCatalogo(); break;
+                case 9: verUsuariosYPrestamos(); break;
+                case 10: cargarDatosEjemplo(); break;
+                case 11: demostracionAutomatica(); break;
+                case 0: salir = true; break;
+                default:
+                    System.out.println("Opción no válida, intenta de nuevo.");
+                    break;
+            }
 
-        //5. POLIMORFISMO
-        // Una misma lista de tipo Libro contiene tanto LibroFisico como
-        // LibroDigital; al llamar estaDisponible() se ejecuta la versión
-        // sobrescrita de cada subclase automáticamente.
-        List<Libro> catalogoDemo = Arrays.asList(libroFisico, libroDigital);
-        System.out.println("\n-- Catálogo registrado (demostración de polimorfismo) --");
-        for (Libro libro : catalogoDemo) {
-            System.out.println(" - " + libro.getTitulo() + " | disponible: " + libro.estaDisponible());
+            if (!salir) {
+                pausar();
+            }
         }
 
-        //6. Registrar Usuario
-        System.out.println("\n-- Registro de Usuario --");
-        System.out.print("ID de usuario: ");
-        String idUsuario = leerTexto(sc, "U-001");
-        System.out.print("Nombre: ");
-        String nombreUsuario = leerTexto(sc, "Usuario Anónimo");
-        System.out.print("Email: ");
-        String email = leerTexto(sc, "correo@ejemplo.com");
-        Usuario usuario = new Usuario(idUsuario, nombreUsuario, email);
+        System.out.println("\n¡Hasta pronto! 👋");
+        sc.close();
+    }
 
-        //7. Registrar Préstamo
-        System.out.println("\n-- Registro de Préstamo --");
-        System.out.print("¿Qué libro desea prestar? (1 = Físico, 2 = Digital): ");
-        int opcion = leerEntero(sc, 1);
-        Libro libroElegido = (opcion == 2) ? libroDigital : libroFisico;
+    private void mostrarMenu() {
+        System.out.println("\n------------------------------------------------");
+        System.out.println(" 1.  Registrar autor");
+        System.out.println(" 2.  Registrar libro físico");
+        System.out.println(" 3.  Registrar libro digital");
+        System.out.println(" 4.  Ingresar existencias (aumentar stock/licencias)");
+        System.out.println(" 5.  Registrar usuario");
+        System.out.println(" 6.  Realizar préstamo");
+        System.out.println(" 7.  Registrar devolución");
+        System.out.println(" 8.  Ver catálogo de libros");
+        System.out.println(" 9.  Ver usuarios y sus préstamos");
+        System.out.println(" 10. Cargar datos de ejemplo (para probar rápido)");
+        System.out.println(" 11. Demostración automática (herencia/polimorfismo)");
+        System.out.println(" 0.  Salir");
+        System.out.println("------------------------------------------------");
+    }
+
+    //OPCIONES DEL MENÚ
+
+    private void registrarAutor() {
+        titulo("REGISTRAR AUTOR");
+        String nombre = leerTexto("Nombre del autor: ");
+        String nacionalidad = leerTexto("Nacionalidad: ");
+        Autor autor = new Autor(nombre, new Date(), nacionalidad);
+        autores.add(autor);
+        System.out.println("Autor \"" + nombre + "\" registrado correctamente.");
+    }
+
+    private void registrarLibroFisico() {
+        titulo("REGISTRAR LIBRO FÍSICO");
+        Autor autor = elegirAutorOCrearUno();
+        if (autor == null) return;
+
+        String serie = leerTexto("Número de serie: ");
+        String titulo = leerTexto("Título: ");
+        int cantidad = leerEnteroPositivo("Cantidad de copias: ");
+        String ubicacion = leerTexto("Ubicación en el estante: ");
+
+        LibroFisico libro = new LibroFisico(serie, titulo, cantidad, new Date(), autor, ubicacion);
+        biblioteca.ingresarLibro(libro);
+        libros.add(libro);
+        System.out.println("Libro físico \"" + titulo + "\" registrado con " + cantidad + " copia(s).");
+    }
+
+    private void registrarLibroDigital() {
+        titulo("REGISTRAR LIBRO DIGITAL");
+        Autor autor = elegirAutorOCrearUno();
+        if (autor == null) return;
+
+        String serie = leerTexto("Número de serie: ");
+        String titulo = leerTexto("Título: ");
+        String formato = leerTexto("Formato (PDF/EPUB/MOBI): ");
+        int licencias = leerEnteroPositivo("Licencias simultáneas disponibles: ");
+
+        LibroDigital libro = new LibroDigital(serie, titulo, licencias, new Date(), autor, formato, 4.5, licencias);
+        biblioteca.ingresarLibro(libro);
+        libros.add(libro);
+        System.out.println("✔ Libro digital \"" + titulo + "\" registrado con " + licencias + " licencia(s).");
+    }
+
+    private void ingresarExistencias() {
+        titulo("INGRESAR EXISTENCIAS");
+        if (libros.isEmpty()) {
+            System.out.println("Todavía no hay libros registrados.");
+            return;
+        }
+        String serie = leerTexto("Número de serie del libro: ");
+        Libro libro = biblioteca.buscarLibroPorSerie(serie);
+        if (libro == null) {
+            System.out.println("No se encontró ningún libro con esa serie.");
+            return;
+        }
+
+        int cantidadNueva = leerEnteroPositivo("Cantidad a agregar: ");
+        libro.setCantidad(libro.getCantidad() + cantidadNueva);
+
+        // Polimorfismo: según el tipo real del libro, se actualiza lo correspondiente
+        if (libro instanceof LibroFisico) {
+            ((LibroFisico) libro).devolver(cantidadNueva); // suma copias disponibles
+            System.out.println("Se agregaron " + cantidadNueva + " copia(s) físicas a \"" + libro.getTitulo() + "\".");
+        } else if (libro instanceof LibroDigital) {
+            LibroDigital digital = (LibroDigital) libro;
+            digital.setLicenciasSimultaneas(digital.getLicenciasSimultaneas() + cantidadNueva);
+            System.out.println("Se agregaron " + cantidadNueva + " licencia(s) a \"" + libro.getTitulo() + "\".");
+        }
+    }
+
+    private void registrarUsuario() {
+        titulo("REGISTRAR USUARIO");
+        String id = leerTexto("ID de usuario: ");
+        String nombre = leerTexto("Nombre: ");
+        String email = leerTexto("Email: ");
+        Usuario usuario = new Usuario(id, nombre, email);
+        usuarios.add(usuario);
+        System.out.println("Usuario \"" + nombre + "\" registrado correctamente.");
+    }
+
+    private void realizarPrestamo() {
+        titulo("REALIZAR PRÉSTAMO");
+        if (usuarios.isEmpty()) {
+            System.out.println(" Primero registra al menos un usuario (opción 5).");
+            return;
+        }
+        if (libros.isEmpty()) {
+            System.out.println(" Primero registra al menos un libro (opción 2 o 3).");
+            return;
+        }
+
+        Usuario usuario = elegirUsuario();
+        if (usuario == null) return;
+
+        Libro libro = elegirLibro();
+        if (libro == null) return;
+
+        // Polimorfismo: no importa el tipo real, se pregunta por la interfaz común
+        if (!libro.estaDisponible()) {
+            System.out.println("\"" + libro.getTitulo() + "\" no tiene disponibilidad en este momento.");
+            return;
+        }
 
         Date hoy = new Date();
         long MILLIS_POR_DIA = 24L * 60 * 60 * 1000;
         Date devolucionEsperada = new Date(hoy.getTime() + 7 * MILLIS_POR_DIA);
 
-        // Composición
-        Prestamo prestamo = new Prestamo("P-" + idUsuario, hoy, devolucionEsperada);
-        // Agregación
-        prestamo.agregarLibro(libroElegido);
+        Prestamo prestamo = new Prestamo("P-" + usuario.getId() + "-" + System.currentTimeMillis(), hoy, devolucionEsperada);
+        prestamo.agregarLibro(libro);
         prestamo.setEstado("Activo");
 
         boolean exito;
-        if (libroElegido instanceof LibroFisico) {
-            exito = ((LibroFisico) libroElegido).prestar();
+        if (libro instanceof LibroFisico) {
+            exito = ((LibroFisico) libro).prestar();
         } else {
-            exito = ((LibroDigital) libroElegido).descargar();
+            exito = ((LibroDigital) libro).descargar();
         }
 
         if (exito) {
             biblioteca.registrarPrestamo(prestamo);
             usuario.solicitarPrestamo(prestamo);
-            System.out.println("\n✔ Préstamo registrado con éxito para \"" + libroElegido.getTitulo() + "\".");
+            System.out.println("Préstamo registrado. Devolución esperada: " + sdf.format(devolucionEsperada));
         } else {
-            System.out.println("\n✘ No hay disponibilidad para prestar ese libro en este momento.");
+            System.out.println("No se pudo completar el préstamo (sin disponibilidad).");
+        }
+    }
+
+    private void registrarDevolucion() {
+        titulo("REGISTRAR DEVOLUCIÓN");
+        Usuario usuario = elegirUsuario();
+        if (usuario == null) return;
+
+        List<Prestamo> activos = new ArrayList<>();
+        for (Prestamo p : usuario.getHistorialPrestamos()) {
+            if (!"Devuelto".equals(p.getEstado())) {
+                activos.add(p);
+            }
         }
 
-        // 8. Búsqueda en la biblioteca
-        System.out.println("\n-- Búsqueda por número de serie --");
-        Libro encontrado = biblioteca.buscarLibroPorSerie(libroElegido.getNumeroSerie());
-        System.out.println("Resultado: " + (encontrado != null ? encontrado.getTitulo() : "No encontrado"));
+        if (activos.isEmpty()) {
+            System.out.println("Este usuario no tiene préstamos activos.");
+            return;
+        }
 
-        // Resumen final 
-        System.out.println("\n=== RESUMEN ===");
-        System.out.println("Biblioteca: " + biblioteca.getNombre());
-        System.out.println("Autor: " + autor.getNombre() + " (" + autor.getNacionalidad() + ")");
-        System.out.println("Usuario: " + usuario.getNombre() + " | préstamos activos: " + usuario.cantidadPrestamosActivos());
+        System.out.println("Préstamos activos de " + usuario.getNombre() + ":");
+        for (int i = 0; i < activos.size(); i++) {
+            Prestamo p = activos.get(i);
+            System.out.println(" " + (i + 1) + ". " + p.getIdPrestamo() + " - libros: " + nombresLibros(p));
+        }
 
-        sc.close();
+        int indice = leerEnteroEnRango("Elige el préstamo a devolver: ", 1, activos.size()) - 1;
+        Prestamo prestamo = activos.get(indice);
+
+        prestamo.registrarDevolucion(new Date());
+
+
+        for (Libro libro : prestamo.getLibrosPrestados()) {
+            if (libro instanceof LibroFisico) {
+                ((LibroFisico) libro).devolver();
+            } else if (libro instanceof LibroDigital) {
+                ((LibroDigital) libro).liberarLicencia();
+            }
+        }
+
+        System.out.println("✔ Devolución registrada para el préstamo " + prestamo.getIdPrestamo() + ".");
+        System.out.println("  (Multa calculada: $" + prestamo.calcularMulta() + " - lógica pendiente de definir en Prestamo)");
+    }
+
+    private void verCatalogo() {
+        titulo("CATÁLOGO DE LIBROS");
+        if (libros.isEmpty()) {
+            System.out.println("ℹ No hay libros registrados todavía.");
+            return;
+        }
+
+        for (Libro libro : libros) {
+            String tipo = (libro instanceof LibroFisico) ? "Físico" : "Digital";
+            String disponibilidad = libro.estaDisponible() ? "Disponible ✅" : "No disponible";
+            System.out.println("- [" + tipo + "] " + libro.getTitulo() +
+                    " | Autor: " + libro.getAutor().getNombre() +
+                    " | Serie: " + libro.getNumeroSerie() +
+                    " | " + disponibilidad);
+        }
+    }
+
+    private void verUsuariosYPrestamos() {
+        titulo("USUARIOS Y SUS PRÉSTAMOS");
+        if (usuarios.isEmpty()) {
+            System.out.println("ℹ No hay usuarios registrados todavía.");
+            return;
+        }
+        for (Usuario usuario : usuarios) {
+            System.out.println("\n👤 " + usuario.getNombre() + " (" + usuario.getEmail() + ")");
+            if (usuario.getHistorialPrestamos().isEmpty()) {
+                System.out.println("   Sin préstamos registrados.");
+            } else {
+                for (Prestamo p : usuario.getHistorialPrestamos()) {
+                    System.out.println("   • " + p.getIdPrestamo() + " | estado: " + p.getEstado() +
+                            " | libros: " + nombresLibros(p));
+                }
+            }
+        }
+    }
+
+    private void cargarDatosEjemplo() {
+        titulo("CARGANDO DATOS DE EJEMPLO");
+
+        Autor autor = new Autor("Gabriel García Márquez", new Date(), "Colombiana");
+        autores.add(autor);
+
+        LibroFisico fisico = new LibroFisico("F-EJ-001", "Cien años de soledad", 3, new Date(), autor, "Estante A1");
+        biblioteca.ingresarLibro(fisico);
+        libros.add(fisico);
+
+        LibroDigital digital = new LibroDigital("D-EJ-001", "El amor en los tiempos del cólera", 2, new Date(), autor, "EPUB", 3.2, 2);
+        biblioteca.ingresarLibro(digital);
+        libros.add(digital);
+
+        Usuario usuario = new Usuario("U-EJ-001", "Ana Torres", "ana.torres@correo.com");
+        usuarios.add(usuario);
+
+        System.out.println("✔ Se cargaron: 1 autor, 1 libro físico, 1 libro digital y 1 usuario de ejemplo.");
+        System.out.println("  Ya puedes probar las opciones 6 (préstamo), 7 (devolución) y 8 (catálogo).");
+    }
+
+    private void demostracionAutomatica() {
+        titulo("DEMOSTRACIÓN AUTOMÁTICA (herencia, sobrecarga y polimorfismo)");
+
+        Autor autorDemo = new Autor("Autor Demo", new Date(), "N/D");
+        LibroFisico libroF = new LibroFisico("DEMO-F", "Libro Físico Demo", 2, new Date(), autorDemo, "Estante DEMO");
+        LibroDigital libroD = new LibroDigital("DEMO-D", "Libro Digital Demo", 1, new Date(), autorDemo, "PDF", 1.0, 1);
+
+        List<Libro> catalogoDemo = new ArrayList<>();
+        catalogoDemo.add(libroF);
+        catalogoDemo.add(libroD);
+
+        System.out.println("Catálogo de demostración:");
+        for (Libro l : catalogoDemo) {
+            System.out.println(" - " + l.getTitulo() + " -> disponible: " + l.estaDisponible());
+        }
+
+        System.out.println("\nPrestando 1 copia física con prestar(): " + libroF.prestar());
+        System.out.println("Intentando prestar 5 copias con prestar(int): " + libroF.prestar(5));
+
+        System.out.println("Descargando libro digital con descargar(): " + libroD.descargar());
+
+        System.out.println("\nEsta demostración no afecta tus datos reales del menú principal.");
+    }
+
+//utilidades
+
+    private Autor elegirAutorOCrearUno() {
+        if (autores.isEmpty()) {
+            System.out.println("ℹ No hay autores registrados todavía, vamos a crear uno.");
+            registrarAutor();
+            if (autores.isEmpty()) return null; // por si algo falló
+            return autores.get(autores.size() - 1);
+        }
+
+        System.out.println("Autores disponibles:");
+        for (int i = 0; i < autores.size(); i++) {
+            System.out.println(" " + (i + 1) + ". " + autores.get(i).getNombre());
+        }
+        System.out.println(" " + (autores.size() + 1) + ". Registrar un autor nuevo");
+
+        int opcion = leerEnteroEnRango("Elige una opción: ", 1, autores.size() + 1);
+        if (opcion == autores.size() + 1) {
+            registrarAutor();
+            return autores.get(autores.size() - 1);
+        }
+        return autores.get(opcion - 1);
+    }
+
+    private Usuario elegirUsuario() {
+        if (usuarios.isEmpty()) {
+            System.out.println("ℹ No hay usuarios registrados.");
+            return null;
+        }
+        System.out.println("Usuarios:");
+        for (int i = 0; i < usuarios.size(); i++) {
+            System.out.println(" " + (i + 1) + ". " + usuarios.get(i).getNombre());
+        }
+        int opcion = leerEnteroEnRango("Elige un usuario: ", 1, usuarios.size());
+        return usuarios.get(opcion - 1);
+    }
+
+    private Libro elegirLibro() {
+        if (libros.isEmpty()) {
+            System.out.println("ℹ No hay libros registrados.");
+            return null;
+        }
+        System.out.println("Libros:");
+        for (int i = 0; i < libros.size(); i++) {
+            Libro l = libros.get(i);
+            String tipo = (l instanceof LibroFisico) ? "Físico" : "Digital";
+            System.out.println(" " + (i + 1) + ". [" + tipo + "] " + l.getTitulo() +
+                    " (" + (l.estaDisponible() ? "disponible" : "no disponible") + ")");
+        }
+        int opcion = leerEnteroEnRango("Elige un libro: ", 1, libros.size());
+        return libros.get(opcion - 1);
+    }
+
+    private String nombresLibros(Prestamo p) {
+        StringBuilder sb = new StringBuilder();
+        for (Libro l : p.getLibrosPrestados()) {
+            if (sb.length() > 0) sb.append(", ");
+            sb.append(l.getTitulo());
+        }
+        return sb.toString();
+    }
+
+    private void titulo(String texto) {
+        System.out.println("\n== " + texto + " ==");
+    }
+
+    private void pausar() {
+        System.out.print("\nPresiona Enter para volver al menú...");
+        sc.nextLine();
     }
 
 
-    private static String leerTexto(Scanner sc, String valorPorDefecto) {
-        String entrada = sc.nextLine();
-        return (entrada == null || entrada.trim().isEmpty()) ? valorPorDefecto : entrada.trim();
+
+    private String leerTexto(String mensaje) {
+        String valor;
+        do {
+            System.out.print(mensaje);
+            valor = sc.nextLine().trim();
+            if (valor.isEmpty()) {
+                System.out.println(" Este campo no puede estar vacío, intenta de nuevo.");
+            }
+        } while (valor.isEmpty());
+        return valor;
     }
 
-    private static int leerEntero(Scanner sc, int valorPorDefecto) {
-        String entrada = sc.nextLine();
-        try {
-            return Integer.parseInt(entrada.trim());
-        } catch (NumberFormatException e) {
-            return valorPorDefecto;
+    private int leerEntero(String mensaje) {
+        while (true) {
+            System.out.print(mensaje);
+            String entrada = sc.nextLine().trim();
+            try {
+                return Integer.parseInt(entrada);
+            } catch (NumberFormatException e) {
+                System.out.println("Escribe solo un número, por favor.");
+            }
+        }
+    }
+
+    private int leerEnteroPositivo(String mensaje) {
+        while (true) {
+            int valor = leerEntero(mensaje);
+            if (valor > 0) return valor;
+            System.out.println("Debe ser un número mayor a 0.");
+        }
+    }
+
+    private int leerEnteroEnRango(String mensaje, int min, int max) {
+        while (true) {
+            int valor = leerEntero(mensaje);
+            if (valor >= min && valor <= max) return valor;
+            System.out.println("Elige un número entre " + min + " y " + max + ".");
         }
     }
 }
