@@ -74,7 +74,6 @@ public class Main {
         System.out.println(" 8.  Ver catálogo de libros");
         System.out.println(" 9.  Ver usuarios y sus préstamos");
         System.out.println(" 10. Cargar datos de ejemplo (para probar rápido)");
-        System.out.println(" 11. Demostración automática (herencia/polimorfismo)");
         System.out.println(" 0.  Salir");
         System.out.println("------------------------------------------------");
     }
