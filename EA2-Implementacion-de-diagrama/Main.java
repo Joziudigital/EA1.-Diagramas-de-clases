@@ -319,19 +319,19 @@ public class Main {
         Usuario usuario = new Usuario("U-EJ-001", "Ana Torres", "ana.torres@iudigital.com");
         usuarios.add(usuario);
 
-        Autor autor = new Autor("Aurelio Baldor", new Date(), "Cubano");
-        autores.add(autor);
+        Autor autor1 = new Autor("Aurelio Baldor", new Date(), "Cubano");
+        autores.add(autor1);
 
-        LibroFisico fisico = new LibroFisico("F-EJ-002", "El álgebrade Baldor", 3, new Date(), autor, "Estante A2");
-        biblioteca.ingresarLibro(fisico);
-        libros.add(fisico);
+        LibroFisico fisico1 = new LibroFisico("F-EJ-002", "El álgebrade Baldor", 3, new Date(), autor1, "Estante A2");
+        biblioteca.ingresarLibro(fisico1);
+        libros.add(fisico1);
 
-        LibroDigital digital = new LibroDigital("D-EJ-002", "El álgebra de Baldor", 4, new Date(), autor, "EPUB", 3.2, 2);
-        biblioteca.ingresarLibro(digital);
-        libros.add(digital);
+        LibroDigital digital1 = new LibroDigital("D-EJ-002", "El álgebra de Baldor", 4, new Date(), autor1, "EPUB", 3.2, 2);
+        biblioteca.ingresarLibro(digital1);
+        libros.add(digital1);
 
-        Usuario usuario = new Usuario("U-EJ-002", "Susanito Juarez", "susanito@iudigital.com");
-        usuarios.add(usuario);
+        Usuario usuario1 = new Usuario("U-EJ-002", "Susanito Juarez", "susanito@iudigital.com");
+        usuarios.add(usuario1);
 
         System.out.println(" Se cargaron: 2 autor, 2 libro físico, 2 libro digital y 2 usuario de ejemplo.");
         System.out.println(" Ya puedes probar las opciones 6 (préstamo), 7 (devolución) y 8 (catálogo).");
