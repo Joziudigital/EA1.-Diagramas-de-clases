@@ -7,7 +7,7 @@ public class Usuario {
     private String id;
     private String nombre;
     private String email;
-    private List<Prestamo> historialPrestamos;
+    private final List<Prestamo> historialPrestamos;
 
     public Usuario(String id, String nombre, String email) {
         this.id = id;
@@ -16,7 +16,6 @@ public class Usuario {
         this.historialPrestamos = new ArrayList<>();
     }
 
-    //Comportamiento
     public void solicitarPrestamo(Prestamo prestamo) {
         this.historialPrestamos.add(prestamo);
     }

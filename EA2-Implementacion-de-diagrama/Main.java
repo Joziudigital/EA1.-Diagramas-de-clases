@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    private final Scanner sc = new Scanner(System.in);
+    private final Scanner sc;
     private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     private final Biblioteca biblioteca = new Biblioteca("Biblioteca Central");
@@ -15,15 +15,21 @@ public class Main {
     private final List<Libro> libros = new ArrayList<>();      // espejo del catálogo para poder listarlo
     private final List<Usuario> usuarios = new ArrayList<>();
 
+    private Main(Scanner sc) {
+        this.sc = sc;
+    }
+
     public static void main(String[] args) {
-        new Main().ejecutar();
+        // try-with-resources: el Scanner se cierra automáticamente al terminar
+        try (Scanner sc = new Scanner(System.in)) {
+            new Main(sc).ejecutar();
+        }
     }
 
     //MENÚ PRINCIPAL
 
     private void ejecutar() {
         boolean salir = false;
-
 
         System.out.println("   SISTEMA DE GESTIÓN DE BIBLIOTECA            ");
         System.out.println("   Bienvenido/a - " + biblioteca.getNombre());
@@ -44,7 +50,6 @@ public class Main {
                 case 8: verCatalogo(); break;
                 case 9: verUsuariosYPrestamos(); break;
                 case 10: cargarDatosEjemplo(); break;
-                case 11: demostracionAutomatica(); break;
                 case 0: salir = true; break;
                 default:
                     System.out.println("Opción no válida, intenta de nuevo.");
@@ -57,7 +62,6 @@ public class Main {
         }
 
         System.out.println("\n¡Hasta pronto! 👋");
-        sc.close();
     }
 
     private void mostrarMenu() {
@@ -77,7 +81,7 @@ public class Main {
         System.out.println("------------------------------------------------");
     }
 
-    //OPCIONES DEL MENÚ
+    // ================= OPCIONES DEL MENÚ =================
 
     private void registrarAutor() {
         titulo("REGISTRAR AUTOR");
@@ -117,7 +121,7 @@ public class Main {
         LibroDigital libro = new LibroDigital(serie, titulo, licencias, new Date(), autor, formato, 4.5, licencias);
         biblioteca.ingresarLibro(libro);
         libros.add(libro);
-        System.out.println("✔ Libro digital \"" + titulo + "\" registrado con " + licencias + " licencia(s).");
+        System.out.println("Libro digital \"" + titulo + "\" registrado con " + licencias + " licencia(s).");
     }
 
     private void ingresarExistencias() {
@@ -137,11 +141,10 @@ public class Main {
         libro.setCantidad(libro.getCantidad() + cantidadNueva);
 
         // Polimorfismo: según el tipo real del libro, se actualiza lo correspondiente
-        if (libro instanceof LibroFisico) {
-            ((LibroFisico) libro).devolver(cantidadNueva); // suma copias disponibles
+        if (libro instanceof LibroFisico fisico) {
+            fisico.devolver(cantidadNueva); // suma copias disponibles
             System.out.println("Se agregaron " + cantidadNueva + " copia(s) físicas a \"" + libro.getTitulo() + "\".");
-        } else if (libro instanceof LibroDigital) {
-            LibroDigital digital = (LibroDigital) libro;
+        } else if (libro instanceof LibroDigital digital) {
             digital.setLicenciasSimultaneas(digital.getLicenciasSimultaneas() + cantidadNueva);
             System.out.println("Se agregaron " + cantidadNueva + " licencia(s) a \"" + libro.getTitulo() + "\".");
         }
@@ -160,11 +163,11 @@ public class Main {
     private void realizarPrestamo() {
         titulo("REALIZAR PRÉSTAMO");
         if (usuarios.isEmpty()) {
-            System.out.println(" Primero registra al menos un usuario (opción 5).");
+            System.out.println("Primero registra al menos un usuario (opción 5).");
             return;
         }
         if (libros.isEmpty()) {
-            System.out.println(" Primero registra al menos un libro (opción 2 o 3).");
+            System.out.println("Primero registra al menos un libro (opción 2 o 3).");
             return;
         }
 
@@ -176,7 +179,7 @@ public class Main {
 
         // Polimorfismo: no importa el tipo real, se pregunta por la interfaz común
         if (!libro.estaDisponible()) {
-            System.out.println("\"" + libro.getTitulo() + "\" no tiene disponibilidad en este momento.");
+            System.out.println("✘ \"" + libro.getTitulo() + "\" no tiene disponibilidad en este momento.");
             return;
         }
 
@@ -189,10 +192,12 @@ public class Main {
         prestamo.setEstado("Activo");
 
         boolean exito;
-        if (libro instanceof LibroFisico) {
-            exito = ((LibroFisico) libro).prestar();
+        if (libro instanceof LibroFisico fisico) {
+            exito = fisico.prestar();
+        } else if (libro instanceof LibroDigital digital) {
+            exito = digital.descargar();
         } else {
-            exito = ((LibroDigital) libro).descargar();
+            exito = false;
         }
 
         if (exito) {
@@ -217,7 +222,7 @@ public class Main {
         }
 
         if (activos.isEmpty()) {
-            System.out.println("Este usuario no tiene préstamos activos.");
+            System.out.println("ℹ Este usuario no tiene préstamos activos.");
             return;
         }
 
@@ -234,10 +239,10 @@ public class Main {
 
 
         for (Libro libro : prestamo.getLibrosPrestados()) {
-            if (libro instanceof LibroFisico) {
-                ((LibroFisico) libro).devolver();
-            } else if (libro instanceof LibroDigital) {
-                ((LibroDigital) libro).liberarLicencia();
+            if (libro instanceof LibroFisico fisico) {
+                fisico.devolver();
+            } else if (libro instanceof LibroDigital digital) {
+                digital.liberarLicencia();
             }
         }
 
@@ -248,15 +253,17 @@ public class Main {
     private void verCatalogo() {
         titulo("CATÁLOGO DE LIBROS");
         if (libros.isEmpty()) {
-            System.out.println("ℹ No hay libros registrados todavía.");
+            System.out.println(" No hay libros registrados todavía.");
             return;
         }
 
         for (Libro libro : libros) {
             String tipo = (libro instanceof LibroFisico) ? "Físico" : "Digital";
-            String disponibilidad = libro.estaDisponible() ? "Disponible ✅" : "No disponible";
+            String disponibilidad = libro.estaDisponible() ? "Disponible" : "No disponible ";
+            Autor autorLibro = libro.getAutor();
+            String nombreAutor = (autorLibro != null) ? autorLibro.getNombre() : "Desconocido";
             System.out.println("- [" + tipo + "] " + libro.getTitulo() +
-                    " | Autor: " + libro.getAutor().getNombre() +
+                    " | Autor: " + nombreAutor +
                     " | Serie: " + libro.getNumeroSerie() +
                     " | " + disponibilidad);
         }
@@ -265,11 +272,11 @@ public class Main {
     private void verUsuariosYPrestamos() {
         titulo("USUARIOS Y SUS PRÉSTAMOS");
         if (usuarios.isEmpty()) {
-            System.out.println("ℹ No hay usuarios registrados todavía.");
+            System.out.println(" No hay usuarios registrados todavía.");
             return;
         }
         for (Usuario usuario : usuarios) {
-            System.out.println("\n👤 " + usuario.getNombre() + " (" + usuario.getEmail() + ")");
+            System.out.println("\n " + usuario.getNombre() + " (" + usuario.getEmail() + ")");
             if (usuario.getHistorialPrestamos().isEmpty()) {
                 System.out.println("   Sin préstamos registrados.");
             } else {
@@ -298,35 +305,12 @@ public class Main {
         Usuario usuario = new Usuario("U-EJ-001", "Ana Torres", "ana.torres@correo.com");
         usuarios.add(usuario);
 
-        System.out.println("✔ Se cargaron: 1 autor, 1 libro físico, 1 libro digital y 1 usuario de ejemplo.");
-        System.out.println("  Ya puedes probar las opciones 6 (préstamo), 7 (devolución) y 8 (catálogo).");
+        System.out.println(" Se cargaron: 1 autor, 1 libro físico, 1 libro digital y 1 usuario de ejemplo.");
+        System.out.println(" Ya puedes probar las opciones 6 (préstamo), 7 (devolución) y 8 (catálogo).");
     }
 
-    private void demostracionAutomatica() {
-        titulo("DEMOSTRACIÓN AUTOMÁTICA (herencia, sobrecarga y polimorfismo)");
 
-        Autor autorDemo = new Autor("Autor Demo", new Date(), "N/D");
-        LibroFisico libroF = new LibroFisico("DEMO-F", "Libro Físico Demo", 2, new Date(), autorDemo, "Estante DEMO");
-        LibroDigital libroD = new LibroDigital("DEMO-D", "Libro Digital Demo", 1, new Date(), autorDemo, "PDF", 1.0, 1);
-
-        List<Libro> catalogoDemo = new ArrayList<>();
-        catalogoDemo.add(libroF);
-        catalogoDemo.add(libroD);
-
-        System.out.println("Catálogo de demostración:");
-        for (Libro l : catalogoDemo) {
-            System.out.println(" - " + l.getTitulo() + " -> disponible: " + l.estaDisponible());
-        }
-
-        System.out.println("\nPrestando 1 copia física con prestar(): " + libroF.prestar());
-        System.out.println("Intentando prestar 5 copias con prestar(int): " + libroF.prestar(5));
-
-        System.out.println("Descargando libro digital con descargar(): " + libroD.descargar());
-
-        System.out.println("\nEsta demostración no afecta tus datos reales del menú principal.");
-    }
-
-//utilidades
+    //UTILIDADES
 
     private Autor elegirAutorOCrearUno() {
         if (autores.isEmpty()) {
@@ -398,14 +382,13 @@ public class Main {
     }
 
 
-
     private String leerTexto(String mensaje) {
         String valor;
         do {
             System.out.print(mensaje);
             valor = sc.nextLine().trim();
             if (valor.isEmpty()) {
-                System.out.println(" Este campo no puede estar vacío, intenta de nuevo.");
+                System.out.println("Este campo no puede estar vacío, intenta de nuevo.");
             }
         } while (valor.isEmpty());
         return valor;
