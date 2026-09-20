@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 
-public class main {
+public class Main {
     private static final long MILLIS_POR_DIA = 24L * 60 * 60 * 1000;
     private static final DateTimeFormatter FORMATO_FECHA =
             DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT);
