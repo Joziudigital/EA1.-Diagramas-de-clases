@@ -1,14 +1,12 @@
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Collection;
+import java.util.List;
 
 
 public class Biblioteca {
     private String nombre;
     
-    private List<Libro> catalogo;
-    private List<Prestamo> prestamos;
+    private final List<Libro> catalogo;
+    private final List<Prestamo> prestamos;
 
     public Biblioteca(String nombre) {
         this.nombre = nombre;
@@ -29,7 +27,6 @@ public class Biblioteca {
   
     }
 
-    // 2. SOBRECARGA DEL MÉTODO
     public void ingresarLibro(Libro nuevoLibro) {
         this.catalogo.add(nuevoLibro);
     }
@@ -37,7 +34,7 @@ public class Biblioteca {
     public Libro buscarLibroPorSerie(String numeroSerie) {
         for (Libro libro : catalogo) {
             if (libro.getNumeroSerie().equals(numeroSerie)) {
-                return libro; // Polimorfismo: Retorna Libro, no importa si es físico o digital
+                return libro; 
             }
         }
         return null; 

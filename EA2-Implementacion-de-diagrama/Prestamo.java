@@ -10,8 +10,7 @@ public class Prestamo {
     private double multa;
     private String estado;
     
-    // Relación de agregación: Un préstamo "incluye" de 1 a muchos Libros
-    private List<Libro> librosPrestados;
+    private final List<Libro> librosPrestados;
 
     public Prestamo(String idPrestamo, Date fechaPrestamo, Date fechaDevolucionEsperada) {
         this.idPrestamo = idPrestamo;
@@ -26,7 +25,7 @@ public class Prestamo {
     }
 
     public boolean estaVencido() {
-        // Lógica para comparar fechas
+
         return false;
     }
 
@@ -40,7 +39,6 @@ public class Prestamo {
         this.librosPrestados.add(libro);
     }
 
-    // --- GETTERS Y SETTERS ---
     public String getIdPrestamo() {
         return idPrestamo;
     }
@@ -88,3 +86,8 @@ public class Prestamo {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public List<Libro> getLibrosPrestados() {
+        return librosPrestados;
+    }
+}
