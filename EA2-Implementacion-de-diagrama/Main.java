@@ -40,20 +40,18 @@ public class Main {
             int opcion = leerEntero("Elige una opción: ");
 
             switch (opcion) {
-                case 1: registrarAutor(); break;
-                case 2: registrarLibroFisico(); break;
-                case 3: registrarLibroDigital(); break;
-                case 4: ingresarExistencias(); break;
-                case 5: registrarUsuario(); break;
-                case 6: realizarPrestamo(); break;
-                case 7: registrarDevolucion(); break;
-                case 8: verCatalogo(); break;
-                case 9: verUsuariosYPrestamos(); break;
-                case 10: cargarDatosEjemplo(); break;
-                case 0: salir = true; break;
-                default:
-                    System.out.println("Opción no válida, intenta de nuevo.");
-                    break;
+                case 1: registrarAutor();
+                case 2: registrarLibroFisico();
+                case 3: registrarLibroDigital();
+                case 4: ingresarExistencias();
+                case 5: registrarUsuario();
+                case 6: realizarPrestamo();
+                case 7: registrarDevolucion();
+                case 8: verCatalogo();
+                case 9: verUsuariosYPrestamos();
+                case 10: cargarDatosEjemplo();
+                case 0: salir = true;
+                default: System.out.println("Opción no válida, intenta de nuevo.");
             }
 
             if (!salir) {
@@ -141,12 +139,17 @@ public class Main {
         libro.setCantidad(libro.getCantidad() + cantidadNueva);
 
         // Polimorfismo: según el tipo real del libro, se actualiza lo correspondiente
-        if (libro instanceof LibroFisico fisico) {
-            fisico.devolver(cantidadNueva); // suma copias disponibles
-            System.out.println("Se agregaron " + cantidadNueva + " copia(s) físicas a \"" + libro.getTitulo() + "\".");
-        } else if (libro instanceof LibroDigital digital) {
-            digital.setLicenciasSimultaneas(digital.getLicenciasSimultaneas() + cantidadNueva);
-            System.out.println("Se agregaron " + cantidadNueva + " licencia(s) a \"" + libro.getTitulo() + "\".");
+        switch (libro) {
+            case LibroFisico fisico -> {
+                fisico.devolver(cantidadNueva); // suma copias disponibles
+                System.out.println("Se agregaron " + cantidadNueva + " copia(s) físicas a \"" + libro.getTitulo() + "\".");
+            }
+            case LibroDigital digital -> {
+                digital.setLicenciasSimultaneas(digital.getLicenciasSimultaneas() + cantidadNueva);
+                System.out.println("Se agregaron " + cantidadNueva + " licencia(s) a \"" + libro.getTitulo() + "\".");
+            }
+            default -> {
+            }
         }
     }
 
@@ -192,12 +195,10 @@ public class Main {
         prestamo.setEstado("Activo");
 
         boolean exito;
-        if (libro instanceof LibroFisico fisico) {
-            exito = fisico.prestar();
-        } else if (libro instanceof LibroDigital digital) {
-            exito = digital.descargar();
-        } else {
-            exito = false;
+        switch (libro) {
+            case LibroFisico fisico -> exito = fisico.prestar();
+            case LibroDigital digital -> exito = digital.descargar();
+            default -> exito = false;
         }
 
         if (exito) {
@@ -239,10 +240,11 @@ public class Main {
 
 
         for (Libro libro : prestamo.getLibrosPrestados()) {
-            if (libro instanceof LibroFisico fisico) {
-                fisico.devolver();
-            } else if (libro instanceof LibroDigital digital) {
-                digital.liberarLicencia();
+            switch (libro) {
+                case LibroFisico fisico -> fisico.devolver();
+                case LibroDigital digital -> digital.liberarLicencia();
+                default -> {
+                }
             }
         }
 
@@ -258,6 +260,9 @@ public class Main {
         }
 
         for (Libro libro : libros) {
+            if (libro == null) {
+                continue;
+            }
             String tipo = (libro instanceof LibroFisico) ? "Físico" : "Digital";
             String disponibilidad = libro.estaDisponible() ? "Disponible" : "No disponible ";
             Autor autorLibro = libro.getAutor();
@@ -355,6 +360,10 @@ public class Main {
         System.out.println("Libros:");
         for (int i = 0; i < libros.size(); i++) {
             Libro l = libros.get(i);
+            if (l == null) {
+                System.out.println(" " + (i + 1) + ". [No disponible]");
+                continue;
+            }
             String tipo = (l instanceof LibroFisico) ? "Físico" : "Digital";
             System.out.println(" " + (i + 1) + ". [" + tipo + "] " + l.getTitulo() +
                     " (" + (l.estaDisponible() ? "disponible" : "no disponible") + ")");
