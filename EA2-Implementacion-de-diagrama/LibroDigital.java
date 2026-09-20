@@ -3,10 +3,10 @@ import java.util.Date;
 
 
 public class LibroDigital extends Libro {
-    private String formato;      // Ej: "PDF", "EPUB"
+    private String formato;      // Puede ser del tipo .pdf o publicación electrónica .epub
     private double tamanoMB;
     private String urlDescarga;
-    private int licenciasEnUso;  // Solo prestar()/devolver() la modifican
+    private int licenciasEnUso;  
 
     public LibroDigital(String numeroSerie, String titulo, int cantidad, Date fechaPublicacion,
                         Autor autor, String formato, double tamanoMB, String urlDescarga) {
