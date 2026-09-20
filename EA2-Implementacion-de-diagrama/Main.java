@@ -78,7 +78,7 @@ public class Main {
         System.out.println("------------------------------------------------");
     }
 
-    // ================= OPCIONES DEL MENÚ =================
+    //OPCIONES DEL MENÚ
 
     private void registrarAutor() {
         titulo("REGISTRAR AUTOR");
