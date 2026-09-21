@@ -63,6 +63,6 @@ Los módulos de alto nivel no deben depender de los de bajo nivel, sino de abstr
 
 ## Archivos del proyecto 
 * **Repositorio:** [Enlace a GitHub](https://github.com/Joziudigital/EA1.-Diagramas-de-clases/tree/main/EA2-Implementacion-de-diagrama)
-* **Video de presentación:** [Presentación]()
+* **Video de presentación:** [Presentación](https://drive.google.com/file/d/17m4yNzXCn0bhhmhg8MVeNv-fBCabxlXN/view?usp=sharing )
 * **Documento Word de Drive:** [EA1. Diagrama de clases](https://docs.google.com/document/d/1T2Y80jZjzlGn-8hQxcv0ZSURwsd-4Lzo/edit?usp=drive_link&ouid=110524674555231772836&rtpof=true&sd=true)
 
